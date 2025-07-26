@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            scroll-snap-align: start;
+        }
+
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .project-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .nav-indicator {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-dot.active {
+            width: 12px;
+            height: 12px;
+            background-color: #3b82f6;
+        }
+
+        .hero-text {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .keyboard-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.7;
+            z-index: 40;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            z-index: 100;
+            transition: width 0.1s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white font-mono overflow-x-hidden">
+    <div class="scroll-progress"></div>
+
+    <!-- Navigation Indicator -->
+    <div class="nav-indicator hidden md:block">
+        <div class="nav-dot bg-gray-600 active" data-section="0"></div>
+        <div class="nav-dot bg-gray-600" data-section="1"></div>
+        <div class="nav-dot bg-gray-600 " data-section="2"></div>
+        <div class="nav-dot bg-gray-600" data-section="3"></div>
+    </div>
+
+    <!-- Keyboard Navigation Hint -->
+    <div class="keyboard-hint text-gray-400 text-sm">
+        <span class="hidden md:block">Use ↑↓ arrow keys or scroll to navigate</span>
+        <span class="md:hidden">Swipe to navigate</span>
+    </div>
+
+    <main class="container-snap">
+        <!-- Hero Section -->
+        <section class="section flex items-center justify-center relative" id="hero">
+            <div class="text-center space-y-6 px-4">
+                <div class="hero-text">
+                    <h1 class="text-6xl md:text-8xl font-light mb-4 tracking-tight">
+                        <span class="text-blue-400">Nik</span> Irfan
+                    </h1>
+                </div>
+                <div class="hero-text">
+                    <p class="text-xl md:text-2xl text-gray-300 font-light tracking-wide">
+                        Entrepreneur, Developer & Designer
+                    </p>
+                </div>
+                <div class="hero-text">
+                    <div class="w-24 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent mx-auto mt-8">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <div class="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
+                    <div class="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section flex items-center justify-center py-20" id="projects">
+            <div class="container mx-auto px-4 max-w-6xl">
+                <h2 class="text-4xl md:text-5xl font-light mb-16 text-center">
+                    Selected <span class="text-blue-400">Projects</span>
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="project-card bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-400">
+                        <div class="h-2 w-16 bg-blue-400 mb-4 rounded"></div>
+                        <h3 class="text-xl font-medium mb-3">Digital Business Card</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                            Revolutionary NFC-enabled digital business cards that instantly share contact information
+                            with a simple tap.
+                        </p>
+                        <div class="flex space-x-4 text-sm">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                Learn More →
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                Contact →
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-400">
+                        <div class="h-2 w-16 bg-purple-400 mb-4 rounded"></div>
+                        <h3 class="text-xl font-medium mb-3">Sublimation Jersey</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                            Custom sublimation printing service for sports jerseys and apparel. Delivering high-quality
+                            and personalized designs for teams, events, and individual customers.
+                        </p>
+                        <div class="flex space-x-4 text-sm">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                Learn More →
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                Order Now →
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-400">
+                        <div class="h-2 w-16 bg-green-400 mb-4 rounded"></div>
+                        <h3 class="text-xl font-medium mb-3">Graphic Design</h3>
+                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                            Comprehensive visual identity solutions including logos, branding, print materials, and
+                            digital assets. Specializing in modern, clean designs that effectively communicate brand
+                            messages across all platforms.
+                        </p>
+                        <div class="flex space-x-4 text-sm">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                                Portfolio →
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                Contact →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section flex items-center justify-center py-20" id="about">
+            <div class="container mx-auto px-4 max-w-4xl">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-4xl md:text-5xl font-light mb-8">
+                            About <span class="text-blue-400">Me</span>
+                        </h2>
+                        <div class="space-y-6 text-gray-300 leading-relaxed">
+                            <p>
+                                I'm a creative entrepreneur with over 5 years of experience in graphic design and 2
+                                years in web development. My journey started with visual design, crafting compelling
+                                brand identities and print materials that tell stories.
+                            </p>
+                            <p>
+                                My main passion lies in building and growing my business ventures. I love turning
+                                creative ideas into profitable solutions, whether it's developing innovative NFC
+                                business cards, creating custom sublimation prints, or designing memorable brand
+                                experiences for clients.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-medium mb-3 text-blue-400">Technologies</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Adobe
+                                    Illustrator</span>
+                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Adobe
+                                    Photoshop</span>
+                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Adobe After
+                                    Effects</span>
+                                <span
+                                    class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">HTML/CSS</span>
+                                <span
+                                    class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Laravel</span>
+                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Sublimation
+                                    Printing</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-medium mb-3 text-blue-400">Currently</h3>
+                            <p class="text-gray-400 text-sm">
+                                Expanding my NFC business card venture while developing new digital solutions for modern
+                                networking and brand experiences.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section flex items-center justify-center py-20" id="contact">
+            <div class="container mx-auto px-4 max-w-4xl text-center">
+                <h2 class="text-4xl md:text-5xl font-light mb-8">
+                    Let's <span class="text-blue-400">Connect</span>
+                </h2>
+
+                <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                    I'm always interested in new opportunities, collaborations, and interesting conversations about
+                    technology and design.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                    <a href="mailto:nmirfan02@gmail.com"
+                        class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg transition-colors text-white font-medium">
+                        Send Message
+                    </a>
+                    <a href="https://wa.me/60123456789?text=Hi!%20I%20just%20visited%20your%20portfolio%20website%20and%20would%20love%20to%20know%20more%20about%20your%20work."
+                        class="border border-gray-600 hover:border-gray-400 px-8 py-3 rounded-lg transition-colors">
+                        Whatsapp
+                    </a>
+                </div>
+
+                <div class="flex justify-center space-x-8">
+                    <a href="https://github.com/ipang02" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        GitHub
+                    </a>
+                    <a href="https://www.linkedin.com/in/nik-muhammad-irfan-bin-shamsul-zuhairi-501a11246/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                        class="text-gray-400 hover:text-blue-400 transition-colors">
+                        LinkedIn
+                    </a>
+                    <a href="https://www.instagram.com/ipang.sz?igsh=NGd6NHQ3cWtndW9i&utm_source=qr"
+                        class="text-gray-400 hover:text-blue-400 transition-colors">
+                        Instagram
+                    </a>
+                    <a href="https://www.tiktok.com/@ipang.kb?_t=ZS-8wXZ1XXlSgq&_r=1"
+                        class="text-gray-400 hover:text-blue-400 transition-colors">
+                        Tiktok
+                    </a>
+                </div>
+
+                <div class="mt-16 pt-8 border-t border-gray-800">
+                    <p class="text-gray-500 text-sm">
+                        © 2025 Nik Irfan. Built with passion and lots of coffee.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global variables
+        let currentSection = 0;
+        const sections = document.querySelectorAll('.section');
+        const navDots = document.querySelectorAll('.nav-dot');
+        const scrollProgress = document.querySelector('.scroll-progress');
+
+        // Initialize animations
+        function initAnimations() {
+            // Hero text animation
+            anime.timeline({
+                easing: 'easeOutQuart',
+                duration: 800
+            })
+                .add({
+                    targets: '.hero-text',
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    delay: anime.stagger(200, { start: 500 })
+                });
+
+            // Animate elements when they come into view
+            const observerOptions = {
+                threshold: 0.3,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const section = entry.target;
+                        animateSection(section);
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // Animate section content
+        function animateSection(section) {
+            const projectCards = section.querySelectorAll('.project-card');
+            const aboutContent = section.querySelectorAll('.space-y-6 > *');
+
+            if (projectCards.length > 0) {
+                anime({
+                    targets: projectCards,
+                    opacity: [0, 1],
+                    translateY: [50, 0],
+                    delay: anime.stagger(150),
+                    duration: 600,
+                    easing: 'easeOutQuart'
+                });
+            }
+
+            if (aboutContent.length > 0) {
+                anime({
+                    targets: aboutContent,
+                    opacity: [0, 1],
+                    translateY: [20, 0],      // Animate upward
+                    scale: [0.85, 1],         // Subtle scale-up
+                    delay: anime.stagger(100),
+                    duration: 1700,
+                    easing: 'easeOutCubic'
+                });
+            }
+
+        }
+
+        // Smooth scroll to section
+        function scrollToSection(index) {
+            if (index >= 0 && index < sections.length) {
+                currentSection = index;
+                sections[index].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                updateNavigation();
+            }
+        }
+
+        // Update navigation indicators
+        function updateNavigation() {
+            navDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSection);
+            });
+        }
+
+        // Update scroll progress
+        function updateScrollProgress() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            scrollProgress.style.width = scrollPercentage + '%';
+        }
+
+        // Keyboard navigation
+        function handleKeyNavigation(event) {
+            switch (event.key) {
+                case 'ArrowDown':
+                case 'PageDown':
+                    event.preventDefault();
+                    if (currentSection < sections.length - 1) {
+                        scrollToSection(currentSection + 1);
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'PageUp':
+                    event.preventDefault();
+                    if (currentSection > 0) {
+                        scrollToSection(currentSection - 1);
+                    }
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    scrollToSection(0);
+                    break;
+                case 'End':
+                    event.preventDefault();
+                    scrollToSection(sections.length - 1);
+                    break;
+            }
+        }
+
+        // Detect current section on scroll
+        function handleScroll() {
+            updateScrollProgress();
+
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    if (currentSection !== index) {
+                        currentSection = index;
+                        updateNavigation();
+                    }
+                }
+            });
+        }
+
+        // Touch/swipe support for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        function handleTouchStart(event) {
+            touchStartY = event.changedTouches[0].screenY;
+        }
+
+        function handleTouchEnd(event) {
+            touchEndY = event.changedTouches[0].screenY;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0 && currentSection < sections.length - 1) {
+                    // Swipe up - next section
+                    scrollToSection(currentSection + 1);
+                } else if (diff < 0 && currentSection > 0) {
+                    // Swipe down - previous section
+                    scrollToSection(currentSection - 1);
+                }
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimations();
+            updateNavigation();
+
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeyNavigation);
+
+            // Scroll detection
+            window.addEventListener('scroll', handleScroll);
+
+            // Navigation dots
+            navDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => scrollToSection(index));
+            });
+
+            // Touch events for mobile
+            document.addEventListener('touchstart', handleTouchStart);
+            document.addEventListener('touchend', handleTouchEnd);
+
+            // Project card hover effects
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    anime({
+                        targets: card,
+                        scale: 1.02,
+                        duration: 300,
+                        easing: 'easeOutQuart'
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    anime({
+                        targets: card,
+                        scale: 1,
+                        duration: 300,
+                        easing: 'easeOutQuart'
+                    });
+                });
+            });
+        });
+
+        // Optimize performance
+        let ticking = false;
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            requestTick();
+        });
+    </script>
+</body>
+
+</html>
