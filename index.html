@@ -31,17 +31,26 @@
 
         body {
             overflow-x: hidden;
+            /* Improved mobile handling */
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
         }
 
         .section {
             min-height: 100vh;
-            scroll-snap-align: start;
+            /* Better mobile viewport handling */
+            min-height: 100dvh;
         }
 
+        /* Improved mobile scrolling container */
         .container-snap {
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
             height: 100vh;
+            height: 100dvh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            overscroll-behavior-y: contain;
         }
 
         .project-card {
@@ -52,12 +61,21 @@
             transform: translateY(-4px);
         }
 
+        /* Mobile-friendly navigation indicator */
         .nav-indicator {
             position: fixed;
-            right: 2rem;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             z-index: 50;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-indicator {
+                right: 0.5rem;
+                padding: 0.25rem;
+            }
         }
 
         .nav-dot {
@@ -67,12 +85,36 @@
             margin: 0.5rem 0;
             transition: all 0.3s ease;
             cursor: pointer;
+            /* Better touch targets on mobile */
+            min-width: 24px;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        .nav-dot.active {
+        .nav-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active::after {
             width: 12px;
             height: 12px;
             background-color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .nav-dot {
+                margin: 0.75rem 0;
+                min-width: 32px;
+                min-height: 32px;
+            }
         }
 
         .hero-text {
@@ -87,6 +129,15 @@
             transform: translateX(-50%);
             opacity: 0.7;
             z-index: 40;
+            /* Hide on very small screens */
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+            .keyboard-hint {
+                bottom: 1rem;
+                font-size: 0.625rem;
+            }
         }
 
         @keyframes fadeIn {
@@ -122,9 +173,16 @@
             transition: width 0.1s ease;
         }
 
-        /* Custom scrollbar */
+        /* Custom scrollbar - hide on mobile */
         ::-webkit-scrollbar {
             width: 8px;
+        }
+
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 0px;
+                background: transparent;
+            }
         }
 
         ::-webkit-scrollbar-track {
@@ -139,6 +197,94 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #4b5563;
         }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .section {
+                padding: 0 1rem;
+                scroll-snap-align: start;
+            }
+
+            /* Prevent zoom on double tap */
+            * {
+                touch-action: manipulation;
+            }
+
+            /* Better text sizing on mobile */
+            .hero-text h1 {
+                font-size: 3rem !important;
+                line-height: 1.1;
+            }
+
+            .hero-text p {
+                font-size: 1.125rem !important;
+            }
+
+            /* Improved project cards on mobile */
+            .project-card {
+                margin-bottom: 1rem;
+            }
+
+            /* Better spacing */
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 2.5rem !important;
+            }
+
+            .section {
+                padding: 0 0.75rem;
+            }
+        }
+
+        /* iOS Safari specific fixes */
+        @supports (-webkit-touch-callout: none) {
+            .container-snap {
+                height: -webkit-fill-available;
+            }
+
+            .section {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        /* Smooth momentum scrolling for iOS */
+        .container-snap {
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: y proximity;
+        }
+
+        @media (max-width: 768px) {
+            .container-snap {
+                scroll-snap-type: none;
+            }
+        }
+
+        /* Mobile swipe indicator */
+        .mobile-swipe-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            z-index: 40;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (min-width: 769px) {
+            .mobile-swipe-hint {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -146,17 +292,16 @@
     <div class="scroll-progress"></div>
 
     <!-- Navigation Indicator -->
-    <div class="nav-indicator hidden md:block">
-        <div class="nav-dot bg-gray-600 active" data-section="0"></div>
-        <div class="nav-dot bg-gray-600" data-section="1"></div>
-        <div class="nav-dot bg-gray-600 " data-section="2"></div>
-        <div class="nav-dot bg-gray-600" data-section="3"></div>
+    <div class="nav-indicator">
+        <div class="nav-dot text-gray-600 active" data-section="0"></div>
+        <div class="nav-dot text-gray-600" data-section="1"></div>
+        <div class="nav-dot text-gray-600" data-section="2"></div>
+        <div class="nav-dot text-gray-600" data-section="3"></div>
     </div>
 
-    <!-- Keyboard Navigation Hint -->
-    <div class="keyboard-hint text-gray-400 text-sm">
-        <span class="hidden md:block">Use ↑↓ arrow keys or scroll to navigate</span>
-        <span class="md:hidden">Swipe to navigate</span>
+    <!-- Mobile Swipe Hint -->
+    <div class="mobile-swipe-hint text-gray-300" id="mobileHint">
+        Swipe up/down to navigate
     </div>
 
     <main class="container-snap">
@@ -223,8 +368,7 @@
                             <a href="https://t.me/+ROxgxMVKX3ox4NSB" class="text-blue-400 hover:text-blue-300 transition-colors">
                                 Catalogue →
                             </a>
-                            <a href="https://wa.me/601121448557?text=Hi%20Clover%20Exclusive%2C%20I%20would%20like%20to%20order%20sublimation%20jersey.%20Please%20assist%20me.
-" class="text-gray-400 hover:text-white transition-colors">
+                            <a href="https://wa.me/601121448557?text=Hi%20Clover%20Exclusive%2C%20I%20would%20like%20to%20order%20sublimation%20jersey.%20Please%20assist%20me." class="text-gray-400 hover:text-white transition-colors">
                                 Order Now →
                             </a>
                         </div>
@@ -361,6 +505,12 @@
         const sections = document.querySelectorAll('.section');
         const navDots = document.querySelectorAll('.nav-dot');
         const scrollProgress = document.querySelector('.scroll-progress');
+        const mobileHint = document.getElementById('mobileHint');
+
+        // Mobile detection
+        const isMobile = window.innerWidth <= 768;
+        let isScrolling = false;
+        let scrollTimer = null;
 
         // Initialize animations
         function initAnimations() {
@@ -378,8 +528,8 @@
 
             // Animate elements when they come into view
             const observerOptions = {
-                threshold: 0.3,
-                rootMargin: '0px 0px -100px 0px'
+                threshold: isMobile ? 0.15 : 0.3,
+                rootMargin: isMobile ? '0px 0px -50px 0px' : '0px 0px -100px 0px'
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -392,6 +542,16 @@
             }, observerOptions);
 
             sections.forEach(section => observer.observe(section));
+
+            // Hide mobile hint after first interaction
+            if (isMobile && mobileHint) {
+                setTimeout(() => {
+                    mobileHint.style.opacity = '0';
+                    setTimeout(() => {
+                        mobileHint.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            }
         }
 
         // Animate section content
@@ -404,8 +564,8 @@
                     targets: projectCards,
                     opacity: [0, 1],
                     translateY: [50, 0],
-                    delay: anime.stagger(150),
-                    duration: 600,
+                    delay: anime.stagger(isMobile ? 100 : 150),
+                    duration: isMobile ? 400 : 600,
                     easing: 'easeOutQuart'
                 });
             }
@@ -414,25 +574,43 @@
                 anime({
                     targets: aboutContent,
                     opacity: [0, 1],
-                    translateY: [20, 0],      // Animate upward
-                    scale: [0.85, 1],         // Subtle scale-up
+                    translateY: [20, 0],
+                    scale: [0.95, 1],
                     delay: anime.stagger(100),
-                    duration: 1700,
+                    duration: isMobile ? 800 : 1000,
                     easing: 'easeOutCubic'
                 });
             }
-
         }
 
-        // Smooth scroll to section
+        // Improved smooth scroll to section
         function scrollToSection(index) {
             if (index >= 0 && index < sections.length) {
                 currentSection = index;
-                sections[index].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                
+                if (isMobile) {
+                    // Use native smooth scroll on mobile for better performance
+                    sections[index].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    // Desktop smooth scroll
+                    sections[index].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
                 updateNavigation();
+                
+                // Hide mobile hint on first navigation
+                if (mobileHint && mobileHint.style.display !== 'none') {
+                    mobileHint.style.opacity = '0';
+                    setTimeout(() => {
+                        mobileHint.style.display = 'none';
+                    }, 300);
+                }
             }
         }
 
@@ -445,14 +623,18 @@
 
         // Update scroll progress
         function updateScrollProgress() {
-            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            const container = document.querySelector('.container-snap');
+            const scrollTop = container.scrollTop;
+            const scrollHeight = container.scrollHeight - container.clientHeight;
+            const scrollPercentage = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
             scrollProgress.style.width = scrollPercentage + '%';
         }
 
-        // Keyboard navigation
+        // Improved keyboard navigation
         function handleKeyNavigation(event) {
+            // Don't interfere on mobile
+            if (isMobile) return;
+            
             switch (event.key) {
                 case 'ArrowDown':
                 case 'PageDown':
@@ -479,11 +661,12 @@
             }
         }
 
-        // Detect current section on scroll
+        // Improved scroll detection
         function handleScroll() {
             updateScrollProgress();
 
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            const container = document.querySelector('.container-snap');
+            const scrollPosition = container.scrollTop + container.clientHeight / 2;
 
             sections.forEach((section, index) => {
                 const sectionTop = section.offsetTop;
@@ -496,33 +679,62 @@
                     }
                 }
             });
+
+            // Set scrolling state
+            isScrolling = true;
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                isScrolling = false;
+            }, 150);
         }
 
-        // Touch/swipe support for mobile
+        // Improved touch/swipe support for mobile
         let touchStartY = 0;
         let touchEndY = 0;
+        let touchStartTime = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
         function handleTouchStart(event) {
-            touchStartY = event.changedTouches[0].screenY;
+            touchStartY = event.changedTouches[0].clientY;
+            touchStartX = event.changedTouches[0].clientX;
+            touchStartTime = Date.now();
         }
 
         function handleTouchEnd(event) {
-            touchEndY = event.changedTouches[0].screenY;
-            handleSwipe();
+            touchEndY = event.changedTouches[0].clientY;
+            touchEndX = event.changedTouches[0].clientX;
+            const touchEndTime = Date.now();
+            
+            // Only process quick swipes (prevent interference with normal scrolling)
+            if (touchEndTime - touchStartTime < 300) {
+                handleSwipe();
+            }
         }
 
         function handleSwipe() {
             const swipeThreshold = 50;
-            const diff = touchStartY - touchEndY;
-
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0 && currentSection < sections.length - 1) {
+            const diffY = touchStartY - touchEndY;
+            const diffX = Math.abs(touchStartX - touchEndX);
+            
+            // Only process vertical swipes (ignore horizontal)
+            if (diffX < 100 && Math.abs(diffY) > swipeThreshold) {
+                if (diffY > 0 && currentSection < sections.length - 1) {
                     // Swipe up - next section
                     scrollToSection(currentSection + 1);
-                } else if (diff < 0 && currentSection > 0) {
+                } else if (diffY < 0 && currentSection > 0) {
                     // Swipe down - previous section
                     scrollToSection(currentSection - 1);
                 }
+            }
+        }
+
+        // Optimized scroll handler
+        let ticking = false;
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
             }
         }
 
@@ -531,56 +743,77 @@
             initAnimations();
             updateNavigation();
 
-            // Keyboard navigation
-            document.addEventListener('keydown', handleKeyNavigation);
+            // Keyboard navigation (desktop only)
+            if (!isMobile) {
+                document.addEventListener('keydown', handleKeyNavigation);
+            }
 
             // Scroll detection
-            window.addEventListener('scroll', handleScroll);
-
-            // Navigation dots
-            navDots.forEach((dot, index) => {
-                dot.addEventListener('click', () => scrollToSection(index));
+            const container = document.querySelector('.container-snap');
+            container.addEventListener('scroll', () => {
+                requestTick();
             });
 
-            // Touch events for mobile
-            document.addEventListener('touchstart', handleTouchStart);
-            document.addEventListener('touchend', handleTouchEnd);
+            // Navigation dots with improved touch targets
+            navDots.forEach((dot, index) => {
+                dot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    scrollToSection(index);
+                });
+                
+                // Add touch event for better mobile responsiveness
+                dot.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    scrollToSection(index);
+                });
+            });
 
-            // Project card hover effects
-            const projectCards = document.querySelectorAll('.project-card');
-            projectCards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    anime({
-                        targets: card,
-                        scale: 1.02,
-                        duration: 300,
-                        easing: 'easeOutQuart'
+            // Improved touch events for mobile
+            if (isMobile) {
+                let touchArea = document.querySelector('.container-snap');
+                touchArea.addEventListener('touchstart', handleTouchStart, { passive: true });
+                touchArea.addEventListener('touchend', handleTouchEnd, { passive: true });
+            }
+
+            // Project card hover effects (desktop only)
+            if (!isMobile) {
+                const projectCards = document.querySelectorAll('.project-card');
+                projectCards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        anime({
+                            targets: card,
+                            scale: 1.02,
+                            duration: 300,
+                            easing: 'easeOutQuart'
+                        });
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        anime({
+                            targets: card,
+                            scale: 1,
+                            duration: 300,
+                            easing: 'easeOutQuart'
+                        });
                     });
                 });
+            }
 
-                card.addEventListener('mouseleave', () => {
-                    anime({
-                        targets: card,
-                        scale: 1,
-                        duration: 300,
-                        easing: 'easeOutQuart'
-                    });
-                });
+            // Handle orientation changes on mobile
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    updateNavigation();
+                    updateScrollProgress();
+                }, 500);
             });
         });
 
-        // Optimize performance
-        let ticking = false;
-
-        function requestTick() {
-            if (!ticking) {
-                requestAnimationFrame(handleScroll);
-                ticking = true;
-            }
-        }
-
-        window.addEventListener('scroll', () => {
-            requestTick();
+        // Handle resize events
+        window.addEventListener('resize', () => {
+            setTimeout(() => {
+                updateNavigation();
+                updateScrollProgress();
+            }, 100);
         });
     </script>
 </body>
