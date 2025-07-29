@@ -14,6 +14,15 @@
                     fontFamily: {
                         'mono': ['JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
                     },
+                    colors: {
+                        'dark-brown': '#12110c',
+                        'warm-brown': '#1a1814',
+                        'medium-brown': '#2d2a23',
+                        'warm-beige': '#b5a896',
+                        'light-beige': '#d4c7b8',
+                        'accent-gold': '#c8a882',
+                        'soft-cream': '#f5f1eb'
+                    },
                     animation: {
                         'fade-in': 'fadeIn 0.6s ease-out',
                         'slide-up': 'slideUp 0.8s ease-out',
@@ -31,17 +40,26 @@
 
         body {
             overflow-x: hidden;
+            /* Improved mobile handling */
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
         }
 
         .section {
             min-height: 100vh;
-            scroll-snap-align: start;
+            /* Better mobile viewport handling */
+            min-height: 100dvh;
         }
 
+        /* Improved mobile scrolling container */
         .container-snap {
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
             height: 100vh;
+            height: 100dvh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            overscroll-behavior-y: contain;
         }
 
         .project-card {
@@ -52,12 +70,21 @@
             transform: translateY(-4px);
         }
 
+        /* Mobile-friendly navigation indicator */
         .nav-indicator {
             position: fixed;
-            right: 2rem;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             z-index: 50;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-indicator {
+                right: 0.5rem;
+                padding: 0.25rem;
+            }
         }
 
         .nav-dot {
@@ -67,12 +94,36 @@
             margin: 0.5rem 0;
             transition: all 0.3s ease;
             cursor: pointer;
+            /* Better touch targets on mobile */
+            min-width: 24px;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        .nav-dot.active {
+        .nav-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active::after {
             width: 12px;
             height: 12px;
-            background-color: #3b82f6;
+            background-color: #c8a882;
+        }
+
+        @media (max-width: 768px) {
+            .nav-dot {
+                margin: 0.75rem 0;
+                min-width: 32px;
+                min-height: 32px;
+            }
         }
 
         .hero-text {
@@ -87,6 +138,15 @@
             transform: translateX(-50%);
             opacity: 0.7;
             z-index: 40;
+            /* Hide on very small screens */
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+            .keyboard-hint {
+                bottom: 1rem;
+                font-size: 0.625rem;
+            }
         }
 
         @keyframes fadeIn {
@@ -117,46 +177,141 @@
             left: 0;
             width: 0%;
             height: 2px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(90deg, #c8a882, #b5a896);
             z-index: 100;
             transition: width 0.1s ease;
         }
 
-        /* Custom scrollbar */
+        /* Custom scrollbar - hide on mobile */
         ::-webkit-scrollbar {
             width: 8px;
         }
 
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 0px;
+                background: transparent;
+            }
+        }
+
         ::-webkit-scrollbar-track {
-            background: #1f2937;
+            background: #1a1814;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #374151;
+            background: #2d2a23;
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #4b5563;
+            background: #b5a896;
+        }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .section {
+                padding: 0 1rem;
+                scroll-snap-align: start;
+            }
+
+            /* Prevent zoom on double tap */
+            * {
+                touch-action: manipulation;
+            }
+
+            /* Better text sizing on mobile */
+            .hero-text h1 {
+                font-size: 3rem !important;
+                line-height: 1.1;
+            }
+
+            .hero-text p {
+                font-size: 1.125rem !important;
+            }
+
+            /* Improved project cards on mobile */
+            .project-card {
+                margin-bottom: 1rem;
+            }
+
+            /* Better spacing */
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 2.5rem !important;
+            }
+
+            .section {
+                padding: 0 0.75rem;
+            }
+        }
+
+        /* iOS Safari specific fixes */
+        @supports (-webkit-touch-callout: none) {
+            .container-snap {
+                height: -webkit-fill-available;
+            }
+
+            .section {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        /* Smooth momentum scrolling for iOS */
+        .container-snap {
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: y proximity;
+        }
+
+        @media (max-width: 768px) {
+            .container-snap {
+                scroll-snap-type: none;
+            }
+        }
+
+        /* Mobile swipe indicator */
+        .mobile-swipe-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(18, 17, 12, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            z-index: 40;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(181, 168, 150, 0.2);
+        }
+
+        @media (min-width: 769px) {
+            .mobile-swipe-hint {
+                display: none;
+            }
         }
     </style>
 </head>
 
-<body class="bg-gray-900 text-white font-mono overflow-x-hidden">
+<body class="font-mono overflow-x-hidden" style="background-color: #12110c; color: #b5a896;">
     <div class="scroll-progress"></div>
 
     <!-- Navigation Indicator -->
-    <div class="nav-indicator hidden md:block">
-        <div class="nav-dot bg-gray-600 active" data-section="0"></div>
-        <div class="nav-dot bg-gray-600" data-section="1"></div>
-        <div class="nav-dot bg-gray-600 " data-section="2"></div>
-        <div class="nav-dot bg-gray-600" data-section="3"></div>
+    <div class="nav-indicator">
+        <div class="nav-dot active" style="color: #6b6356;" data-section="0"></div>
+        <div class="nav-dot" style="color: #6b6356;" data-section="1"></div>
+        <div class="nav-dot" style="color: #6b6356;" data-section="2"></div>
+        <div class="nav-dot" style="color: #6b6356;" data-section="3"></div>
     </div>
 
-    <!-- Keyboard Navigation Hint -->
-    <div class="keyboard-hint text-gray-400 text-sm">
-        <span class="hidden md:block">Use ↑↓ arrow keys or scroll to navigate</span>
-        <span class="md:hidden">Swipe to navigate</span>
+    <!-- Mobile Swipe Hint -->
+    <div class="mobile-swipe-hint" id="mobileHint" style="color: #d4c7b8;">
+        Swipe up/down to navigate
     </div>
 
     <main class="container-snap">
@@ -165,24 +320,24 @@
             <div class="text-center space-y-6 px-4">
                 <div class="hero-text">
                     <h1 class="text-6xl md:text-8xl font-light mb-4 tracking-tight">
-                        <span class="text-blue-400">Nik</span> Irfan
+                        <span style="color: #c8a882;">Nik</span> Irfan
                     </h1>
                 </div>
                 <div class="hero-text">
-                    <p class="text-xl md:text-2xl text-gray-300 font-light tracking-wide">
+                    <p class="text-xl md:text-2xl font-light tracking-wide" style="color: #d4c7b8;">
                         Entrepreneur, Developer & Designer
                     </p>
                 </div>
                 <div class="hero-text">
-                    <div class="w-24 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent mx-auto mt-8">
+                    <div class="w-24 h-px mx-auto mt-8" style="background: linear-gradient(to right, transparent, #c8a882, transparent);">
                     </div>
                 </div>
             </div>
 
             <!-- Scroll indicator -->
             <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-                <div class="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
-                    <div class="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse"></div>
+                <div class="w-6 h-10 border-2 rounded-full flex justify-center" style="border-color: #6b6356;">
+                    <div class="w-1 h-3 rounded-full mt-2 animate-pulse" style="background-color: #6b6356;"></div>
                 </div>
             </div>
         </section>
@@ -191,58 +346,87 @@
         <section class="section flex items-center justify-center py-20" id="projects">
             <div class="container mx-auto px-4 max-w-6xl">
                 <h2 class="text-4xl md:text-5xl font-light mb-16 text-center">
-                    Selected <span class="text-blue-400">Projects</span>
+                    Selected <span style="color: #c8a882;">Projects</span>
                 </h2>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="project-card bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-400">
-                        <div class="h-2 w-16 bg-blue-400 mb-4 rounded"></div>
+                    <div class="project-card p-6 rounded-lg border" style="background-color: #1a1814; border-color: #2d2a23;" 
+                         onmouseover="this.style.borderColor='#c8a882'" 
+                         onmouseout="this.style.borderColor='#2d2a23'">
+                        <div class="h-2 w-16 mb-4 rounded" style="background-color: #c8a882;"></div>
                         <h3 class="text-xl font-medium mb-3">Digital Business Card</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed" style="color: #6b6356;">
                             Revolutionary NFC-enabled digital business cards that instantly share contact information
                             with a simple tap.
                         </p>
                         <div class="flex space-x-4 text-sm">
-                            <a href="https://www.instagram.com/nextap.my?igsh=Znh6Z215dnpidnIw" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            <a href="https://www.instagram.com/nextap.my?igsh=Znh6Z215dnpidnIw" 
+                               class="transition-colors" 
+                               style="color: #c8a882;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#c8a882'">
                                 Learn More →
                             </a>
-                            <a href="https://wa.me/601121448557?text=Hi%2C%20saya%20berminat%20untuk%20menempah%20Nextap%20Digital%20Business%20Card." class="text-gray-400 hover:text-white transition-colors">
+                            <a href="https://wa.me/601121448557?text=Hi%2C%20saya%20berminat%20untuk%20menempah%20Nextap%20Digital%20Business%20Card." 
+                               class="transition-colors" 
+                               style="color: #6b6356;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#6b6356'">
                                 Contact →
                             </a>
                         </div>
                     </div>
 
-                    <div class="project-card bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-400">
-                        <div class="h-2 w-16 bg-purple-400 mb-4 rounded"></div>
+                    <div class="project-card p-6 rounded-lg border" style="background-color: #1a1814; border-color: #2d2a23;" 
+                         onmouseover="this.style.borderColor='#c8a882'" 
+                         onmouseout="this.style.borderColor='#2d2a23'">
+                        <div class="h-2 w-16 mb-4 rounded" style="background-color: #a67c52;"></div>
                         <h3 class="text-xl font-medium mb-3">Sublimation Jersey</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed" style="color: #6b6356;">
                             Custom sublimation printing service for sports jerseys and apparel. Delivering high-quality
                             and personalized designs for teams, events, and individual customers.
                         </p>
                         <div class="flex space-x-4 text-sm">
-                            <a href="https://t.me/+ROxgxMVKX3ox4NSB" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            <a href="https://t.me/+ROxgxMVKX3ox4NSB" 
+                               class="transition-colors" 
+                               style="color: #c8a882;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#c8a882'">
                                 Catalogue →
                             </a>
-                            <a href="https://wa.me/601121448557?text=Hi%20Clover%20Exclusive%2C%20I%20would%20like%20to%20order%20sublimation%20jersey.%20Please%20assist%20me.
-" class="text-gray-400 hover:text-white transition-colors">
+                            <a href="https://wa.me/601121448557?text=Hi%20Clover%20Exclusive%2C%20I%20would%20like%20to%20order%20sublimation%20jersey.%20Please%20assist%20me." 
+                               class="transition-colors" 
+                               style="color: #6b6356;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#6b6356'">
                                 Order Now →
                             </a>
                         </div>
                     </div>
 
-                    <div class="project-card bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-blue-400">
-                        <div class="h-2 w-16 bg-green-400 mb-4 rounded"></div>
+                    <div class="project-card p-6 rounded-lg border" style="background-color: #1a1814; border-color: #2d2a23;" 
+                         onmouseover="this.style.borderColor='#c8a882'" 
+                         onmouseout="this.style.borderColor='#2d2a23'">
+                        <div class="h-2 w-16 mb-4 rounded" style="background-color: #8b7355;"></div>
                         <h3 class="text-xl font-medium mb-3">Graphic Design</h3>
-                        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                        <p class="mb-4 text-sm leading-relaxed" style="color: #6b6356;">
                             Comprehensive visual identity solutions including logos, branding, print materials, and
                             digital assets. Specializing in modern, clean designs that effectively communicate brand
                             messages across all platforms.
                         </p>
                         <div class="flex space-x-4 text-sm">
-                            <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                            <a href="#" 
+                               class="transition-colors" 
+                               style="color: #c8a882;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#c8a882'">
                                 Portfolio →
                             </a>
-                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <a href="#" 
+                               class="transition-colors" 
+                               style="color: #6b6356;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#6b6356'">
                                 Contact →
                             </a>
                         </div>
@@ -257,9 +441,9 @@
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div>
                         <h2 class="text-4xl md:text-5xl font-light mb-8">
-                            About <span class="text-blue-400">Me</span>
+                            About <span style="color: #c8a882;">Me</span>
                         </h2>
-                        <div class="space-y-6 text-gray-300 leading-relaxed">
+                        <div class="space-y-6 leading-relaxed" style="color: #d4c7b8;">
                             <p>
                                 I'm a creative entrepreneur with over 5 years of experience in graphic design and 2
                                 years in web development. My journey started with visual design, crafting compelling
@@ -276,26 +460,24 @@
 
                     <div class="space-y-6">
                         <div>
-                            <h3 class="text-lg font-medium mb-3 text-blue-400">Technologies</h3>
+                            <h3 class="text-lg font-medium mb-3" style="color: #c8a882;">Technologies</h3>
                             <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Adobe
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Adobe
                                     Illustrator</span>
-                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Adobe
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Adobe
                                     Photoshop</span>
-                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Adobe After
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Adobe After
                                     Effects</span>
-                                <span
-                                    class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">HTML/CSS</span>
-                                <span
-                                    class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Laravel</span>
-                                <span class="px-3 py-1 bg-gray-800 text-sm rounded border border-gray-700">Sublimation
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">HTML/CSS</span>
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Laravel</span>
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Sublimation
                                     Printing</span>
                             </div>
                         </div>
 
                         <div>
-                            <h3 class="text-lg font-medium mb-3 text-blue-400">Currently</h3>
-                            <p class="text-gray-400 text-sm">
+                            <h3 class="text-lg font-medium mb-3" style="color: #c8a882;">Currently</h3>
+                            <p class="text-sm" style="color: #6b6356;">
                                 Expanding my NFC business card venture while developing new digital solutions for modern
                                 networking and brand experiences.
                             </p>
@@ -309,45 +491,64 @@
         <section class="section flex items-center justify-center py-20" id="contact">
             <div class="container mx-auto px-4 max-w-4xl text-center">
                 <h2 class="text-4xl md:text-5xl font-light mb-8">
-                    Let's <span class="text-blue-400">Connect</span>
+                    Let's <span style="color: #c8a882;">Connect</span>
                 </h2>
 
-                <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                <p class="text-xl mb-12 max-w-2xl mx-auto" style="color: #d4c7b8;">
                     I'm always interested in new opportunities, collaborations, and interesting conversations about
                     technology and design.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
                     <a href="mailto:nmirfan02@gmail.com"
-                        class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg transition-colors text-white font-medium">
+                        class="px-8 py-3 rounded-lg transition-colors font-medium"
+                        style="background-color: #c8a882; color: #12110c;" 
+                        onmouseover="this.style.backgroundColor='#b5a896'" 
+                        onmouseout="this.style.backgroundColor='#c8a882'">
                         Send Message
                     </a>
                     <a href="https://wa.me/601121448557?text=Hi!%20I%20just%20visited%20your%20portfolio%20website%20and%20would%20love%20to%20know%20more%20about%20your%20work."
-                        class="border border-gray-600 hover:border-gray-400 px-8 py-3 rounded-lg transition-colors">
+                        class="border px-8 py-3 rounded-lg transition-colors" 
+                        style="border-color: #2d2a23;" 
+                        onmouseover="this.style.borderColor='#6b6356'" 
+                        onmouseout="this.style.borderColor='#2d2a23'">
                         Whatsapp
                     </a>
                 </div>
 
                 <div class="flex justify-center space-x-8">
-                    <a href="https://github.com/ipang02" class="text-gray-400 hover:text-blue-400 transition-colors">
+                    <a href="https://github.com/ipang02" 
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         GitHub
                     </a>
                     <a href="https://www.linkedin.com/in/nik-muhammad-irfan-bin-shamsul-zuhairi-501a11246/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
-                        class="text-gray-400 hover:text-blue-400 transition-colors">
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         LinkedIn
                     </a>
                     <a href="https://www.instagram.com/ipang.sz?igsh=NGd6NHQ3cWtndW9i&utm_source=qr"
-                        class="text-gray-400 hover:text-blue-400 transition-colors">
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         Instagram
                     </a>
                     <a href="https://www.tiktok.com/@ipang.kb?_t=ZS-8wXZ1XXlSgq&_r=1"
-                        class="text-gray-400 hover:text-blue-400 transition-colors">
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         Tiktok
                     </a>
                 </div>
 
-                <div class="mt-16 pt-8 border-t border-gray-800">
-                    <p class="text-gray-500 text-sm">
+                <div class="mt-16 pt-8 border-t" style="border-color: #2d2a23;">
+                    <p class="text-sm" style="color: #4a453e;">
                         © 2025 Nik Irfan. Built with passion and lots of coffee.
                     </p>
                 </div>
@@ -361,6 +562,12 @@
         const sections = document.querySelectorAll('.section');
         const navDots = document.querySelectorAll('.nav-dot');
         const scrollProgress = document.querySelector('.scroll-progress');
+        const mobileHint = document.getElementById('mobileHint');
+
+        // Mobile detection
+        const isMobile = window.innerWidth <= 768;
+        let isScrolling = false;
+        let scrollTimer = null;
 
         // Initialize animations
         function initAnimations() {
@@ -378,8 +585,8 @@
 
             // Animate elements when they come into view
             const observerOptions = {
-                threshold: 0.3,
-                rootMargin: '0px 0px -100px 0px'
+                threshold: isMobile ? 0.15 : 0.3,
+                rootMargin: isMobile ? '0px 0px -50px 0px' : '0px 0px -100px 0px'
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -392,6 +599,16 @@
             }, observerOptions);
 
             sections.forEach(section => observer.observe(section));
+
+            // Hide mobile hint after first interaction
+            if (isMobile && mobileHint) {
+                setTimeout(() => {
+                    mobileHint.style.opacity = '0';
+                    setTimeout(() => {
+                        mobileHint.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            }
         }
 
         // Animate section content
@@ -404,8 +621,8 @@
                     targets: projectCards,
                     opacity: [0, 1],
                     translateY: [50, 0],
-                    delay: anime.stagger(150),
-                    duration: 600,
+                    delay: anime.stagger(isMobile ? 100 : 150),
+                    duration: isMobile ? 400 : 600,
                     easing: 'easeOutQuart'
                 });
             }
@@ -414,25 +631,43 @@
                 anime({
                     targets: aboutContent,
                     opacity: [0, 1],
-                    translateY: [20, 0],      // Animate upward
-                    scale: [0.85, 1],         // Subtle scale-up
+                    translateY: [20, 0],
+                    scale: [0.95, 1],
                     delay: anime.stagger(100),
-                    duration: 1700,
+                    duration: isMobile ? 800 : 1000,
                     easing: 'easeOutCubic'
                 });
             }
-
         }
 
-        // Smooth scroll to section
+        // Improved smooth scroll to section
         function scrollToSection(index) {
             if (index >= 0 && index < sections.length) {
                 currentSection = index;
-                sections[index].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                
+                if (isMobile) {
+                    // Use native smooth scroll on mobile for better performance
+                    sections[index].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    // Desktop smooth scroll
+                    sections[index].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
                 updateNavigation();
+                
+                // Hide mobile hint on first navigation
+                if (mobileHint && mobileHint.style.display !== 'none') {
+                    mobileHint.style.opacity = '0';
+                    setTimeout(() => {
+                        mobileHint.style.display = 'none';
+                    }, 300);
+                }
             }
         }
 
@@ -445,14 +680,18 @@
 
         // Update scroll progress
         function updateScrollProgress() {
-            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            const container = document.querySelector('.container-snap');
+            const scrollTop = container.scrollTop;
+            const scrollHeight = container.scrollHeight - container.clientHeight;
+            const scrollPercentage = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
             scrollProgress.style.width = scrollPercentage + '%';
         }
 
-        // Keyboard navigation
+        // Improved keyboard navigation
         function handleKeyNavigation(event) {
+            // Don't interfere on mobile
+            if (isMobile) return;
+            
             switch (event.key) {
                 case 'ArrowDown':
                 case 'PageDown':
@@ -479,11 +718,12 @@
             }
         }
 
-        // Detect current section on scroll
+        // Improved scroll detection
         function handleScroll() {
             updateScrollProgress();
 
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            const container = document.querySelector('.container-snap');
+            const scrollPosition = container.scrollTop + container.clientHeight / 2;
 
             sections.forEach((section, index) => {
                 const sectionTop = section.offsetTop;
@@ -496,33 +736,62 @@
                     }
                 }
             });
+
+            // Set scrolling state
+            isScrolling = true;
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                isScrolling = false;
+            }, 150);
         }
 
-        // Touch/swipe support for mobile
+        // Improved touch/swipe support for mobile
         let touchStartY = 0;
         let touchEndY = 0;
+        let touchStartTime = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
         function handleTouchStart(event) {
-            touchStartY = event.changedTouches[0].screenY;
+            touchStartY = event.changedTouches[0].clientY;
+            touchStartX = event.changedTouches[0].clientX;
+            touchStartTime = Date.now();
         }
 
         function handleTouchEnd(event) {
-            touchEndY = event.changedTouches[0].screenY;
-            handleSwipe();
+            touchEndY = event.changedTouches[0].clientY;
+            touchEndX = event.changedTouches[0].clientX;
+            const touchEndTime = Date.now();
+            
+            // Only process quick swipes (prevent interference with normal scrolling)
+            if (touchEndTime - touchStartTime < 300) {
+                handleSwipe();
+            }
         }
 
         function handleSwipe() {
             const swipeThreshold = 50;
-            const diff = touchStartY - touchEndY;
-
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0 && currentSection < sections.length - 1) {
+            const diffY = touchStartY - touchEndY;
+            const diffX = Math.abs(touchStartX - touchEndX);
+            
+            // Only process vertical swipes (ignore horizontal)
+            if (diffX < 100 && Math.abs(diffY) > swipeThreshold) {
+                if (diffY > 0 && currentSection < sections.length - 1) {
                     // Swipe up - next section
                     scrollToSection(currentSection + 1);
-                } else if (diff < 0 && currentSection > 0) {
+                } else if (diffY < 0 && currentSection > 0) {
                     // Swipe down - previous section
                     scrollToSection(currentSection - 1);
                 }
+            }
+        }
+
+        // Optimized scroll handler
+        let ticking = false;
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
             }
         }
 
@@ -531,56 +800,77 @@
             initAnimations();
             updateNavigation();
 
-            // Keyboard navigation
-            document.addEventListener('keydown', handleKeyNavigation);
+            // Keyboard navigation (desktop only)
+            if (!isMobile) {
+                document.addEventListener('keydown', handleKeyNavigation);
+            }
 
             // Scroll detection
-            window.addEventListener('scroll', handleScroll);
-
-            // Navigation dots
-            navDots.forEach((dot, index) => {
-                dot.addEventListener('click', () => scrollToSection(index));
+            const container = document.querySelector('.container-snap');
+            container.addEventListener('scroll', () => {
+                requestTick();
             });
 
-            // Touch events for mobile
-            document.addEventListener('touchstart', handleTouchStart);
-            document.addEventListener('touchend', handleTouchEnd);
+            // Navigation dots with improved touch targets
+            navDots.forEach((dot, index) => {
+                dot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    scrollToSection(index);
+                });
+                
+                // Add touch event for better mobile responsiveness
+                dot.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    scrollToSection(index);
+                });
+            });
 
-            // Project card hover effects
-            const projectCards = document.querySelectorAll('.project-card');
-            projectCards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    anime({
-                        targets: card,
-                        scale: 1.02,
-                        duration: 300,
-                        easing: 'easeOutQuart'
+            // Improved touch events for mobile
+            if (isMobile) {
+                let touchArea = document.querySelector('.container-snap');
+                touchArea.addEventListener('touchstart', handleTouchStart, { passive: true });
+                touchArea.addEventListener('touchend', handleTouchEnd, { passive: true });
+            }
+
+            // Project card hover effects (desktop only)
+            if (!isMobile) {
+                const projectCards = document.querySelectorAll('.project-card');
+                projectCards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        anime({
+                            targets: card,
+                            scale: 1.02,
+                            duration: 300,
+                            easing: 'easeOutQuart'
+                        });
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        anime({
+                            targets: card,
+                            scale: 1,
+                            duration: 300,
+                            easing: 'easeOutQuart'
+                        });
                     });
                 });
+            }
 
-                card.addEventListener('mouseleave', () => {
-                    anime({
-                        targets: card,
-                        scale: 1,
-                        duration: 300,
-                        easing: 'easeOutQuart'
-                    });
-                });
+            // Handle orientation changes on mobile
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    updateNavigation();
+                    updateScrollProgress();
+                }, 500);
             });
         });
 
-        // Optimize performance
-        let ticking = false;
-
-        function requestTick() {
-            if (!ticking) {
-                requestAnimationFrame(handleScroll);
-                ticking = true;
-            }
-        }
-
-        window.addEventListener('scroll', () => {
-            requestTick();
+        // Handle resize events
+        window.addEventListener('resize', () => {
+            setTimeout(() => {
+                updateNavigation();
+                updateScrollProgress();
+            }, 100);
         });
     </script>
 </body>
