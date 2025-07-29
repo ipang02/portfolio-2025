@@ -51,17 +51,6 @@
             min-height: 100dvh;
         }
 
-        /* Improved mobile scrolling container */
-        .container-snap {
-            height: 100vh;
-            height: 100dvh;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-            overscroll-behavior-y: contain;
-        }
-
         .project-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -253,24 +242,8 @@
 
         /* iOS Safari specific fixes */
         @supports (-webkit-touch-callout: none) {
-            .container-snap {
-                height: -webkit-fill-available;
-            }
-
             .section {
                 min-height: -webkit-fill-available;
-            }
-        }
-
-        /* Smooth momentum scrolling for iOS */
-        .container-snap {
-            -webkit-overflow-scrolling: touch;
-            scroll-snap-type: y proximity;
-        }
-
-        @media (max-width: 768px) {
-            .container-snap {
-                scroll-snap-type: none;
             }
         }
 
@@ -301,20 +274,7 @@
 <body class="font-mono overflow-x-hidden" style="background-color: #12110c; color: #b5a896;">
     <div class="scroll-progress"></div>
 
-    <!-- Navigation Indicator -->
-    <div class="nav-indicator">
-        <div class="nav-dot active" style="color: #6b6356;" data-section="0"></div>
-        <div class="nav-dot" style="color: #6b6356;" data-section="1"></div>
-        <div class="nav-dot" style="color: #6b6356;" data-section="2"></div>
-        <div class="nav-dot" style="color: #6b6356;" data-section="3"></div>
-    </div>
-
-    <!-- Mobile Swipe Hint -->
-    <div class="mobile-swipe-hint" id="mobileHint" style="color: #d4c7b8;">
-        Swipe up/down to navigate
-    </div>
-
-    <main class="container-snap">
+    <main>
         <!-- Hero Section -->
         <section class="section flex items-center justify-center relative" id="hero">
             <div class="text-center space-y-6 px-4">
@@ -557,18 +517,6 @@
     </main>
 
     <script>
-        // Global variables
-        let currentSection = 0;
-        const sections = document.querySelectorAll('.section');
-        const navDots = document.querySelectorAll('.nav-dot');
-        const scrollProgress = document.querySelector('.scroll-progress');
-        const mobileHint = document.getElementById('mobileHint');
-
-        // Mobile detection
-        const isMobile = window.innerWidth <= 768;
-        let isScrolling = false;
-        let scrollTimer = null;
-
         // Initialize animations
         function initAnimations() {
             // Hero text animation
@@ -585,8 +533,8 @@
 
             // Animate elements when they come into view
             const observerOptions = {
-                threshold: isMobile ? 0.15 : 0.3,
-                rootMargin: isMobile ? '0px 0px -50px 0px' : '0px 0px -100px 0px'
+                threshold: 0.2,
+                rootMargin: '0px 0px -100px 0px'
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -598,17 +546,7 @@
                 });
             }, observerOptions);
 
-            sections.forEach(section => observer.observe(section));
-
-            // Hide mobile hint after first interaction
-            if (isMobile && mobileHint) {
-                setTimeout(() => {
-                    mobileHint.style.opacity = '0';
-                    setTimeout(() => {
-                        mobileHint.style.display = 'none';
-                    }, 300);
-                }, 5000);
-            }
+            document.querySelectorAll('.section').forEach(section => observer.observe(section));
         }
 
         // Animate section content
@@ -621,8 +559,8 @@
                     targets: projectCards,
                     opacity: [0, 1],
                     translateY: [50, 0],
-                    delay: anime.stagger(isMobile ? 100 : 150),
-                    duration: isMobile ? 400 : 600,
+                    delay: anime.stagger(150),
+                    duration: 600,
                     easing: 'easeOutQuart'
                 });
             }
@@ -634,206 +572,29 @@
                     translateY: [20, 0],
                     scale: [0.95, 1],
                     delay: anime.stagger(100),
-                    duration: isMobile ? 800 : 1000,
+                    duration: 1000,
                     easing: 'easeOutCubic'
                 });
             }
         }
 
-        // Improved smooth scroll to section
-        function scrollToSection(index) {
-            if (index >= 0 && index < sections.length) {
-                currentSection = index;
-                
-                if (isMobile) {
-                    // Use native smooth scroll on mobile for better performance
-                    sections[index].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                } else {
-                    // Desktop smooth scroll
-                    sections[index].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-                
-                updateNavigation();
-                
-                // Hide mobile hint on first navigation
-                if (mobileHint && mobileHint.style.display !== 'none') {
-                    mobileHint.style.opacity = '0';
-                    setTimeout(() => {
-                        mobileHint.style.display = 'none';
-                    }, 300);
-                }
-            }
-        }
-
-        // Update navigation indicators
-        function updateNavigation() {
-            navDots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSection);
-            });
-        }
-
         // Update scroll progress
         function updateScrollProgress() {
-            const container = document.querySelector('.container-snap');
-            const scrollTop = container.scrollTop;
-            const scrollHeight = container.scrollHeight - container.clientHeight;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercentage = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-            scrollProgress.style.width = scrollPercentage + '%';
-        }
-
-        // Improved keyboard navigation
-        function handleKeyNavigation(event) {
-            // Don't interfere on mobile
-            if (isMobile) return;
-            
-            switch (event.key) {
-                case 'ArrowDown':
-                case 'PageDown':
-                    event.preventDefault();
-                    if (currentSection < sections.length - 1) {
-                        scrollToSection(currentSection + 1);
-                    }
-                    break;
-                case 'ArrowUp':
-                case 'PageUp':
-                    event.preventDefault();
-                    if (currentSection > 0) {
-                        scrollToSection(currentSection - 1);
-                    }
-                    break;
-                case 'Home':
-                    event.preventDefault();
-                    scrollToSection(0);
-                    break;
-                case 'End':
-                    event.preventDefault();
-                    scrollToSection(sections.length - 1);
-                    break;
-            }
-        }
-
-        // Improved scroll detection
-        function handleScroll() {
-            updateScrollProgress();
-
-            const container = document.querySelector('.container-snap');
-            const scrollPosition = container.scrollTop + container.clientHeight / 2;
-
-            sections.forEach((section, index) => {
-                const sectionTop = section.offsetTop;
-                const sectionBottom = sectionTop + section.offsetHeight;
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    if (currentSection !== index) {
-                        currentSection = index;
-                        updateNavigation();
-                    }
-                }
-            });
-
-            // Set scrolling state
-            isScrolling = true;
-            clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(() => {
-                isScrolling = false;
-            }, 150);
-        }
-
-        // Improved touch/swipe support for mobile
-        let touchStartY = 0;
-        let touchEndY = 0;
-        let touchStartTime = 0;
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function handleTouchStart(event) {
-            touchStartY = event.changedTouches[0].clientY;
-            touchStartX = event.changedTouches[0].clientX;
-            touchStartTime = Date.now();
-        }
-
-        function handleTouchEnd(event) {
-            touchEndY = event.changedTouches[0].clientY;
-            touchEndX = event.changedTouches[0].clientX;
-            const touchEndTime = Date.now();
-            
-            // Only process quick swipes (prevent interference with normal scrolling)
-            if (touchEndTime - touchStartTime < 300) {
-                handleSwipe();
-            }
-        }
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diffY = touchStartY - touchEndY;
-            const diffX = Math.abs(touchStartX - touchEndX);
-            
-            // Only process vertical swipes (ignore horizontal)
-            if (diffX < 100 && Math.abs(diffY) > swipeThreshold) {
-                if (diffY > 0 && currentSection < sections.length - 1) {
-                    // Swipe up - next section
-                    scrollToSection(currentSection + 1);
-                } else if (diffY < 0 && currentSection > 0) {
-                    // Swipe down - previous section
-                    scrollToSection(currentSection - 1);
-                }
-            }
-        }
-
-        // Optimized scroll handler
-        let ticking = false;
-        function requestTick() {
-            if (!ticking) {
-                requestAnimationFrame(handleScroll);
-                ticking = true;
-            }
+            document.querySelector('.scroll-progress').style.width = scrollPercentage + '%';
         }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
             initAnimations();
-            updateNavigation();
 
-            // Keyboard navigation (desktop only)
-            if (!isMobile) {
-                document.addEventListener('keydown', handleKeyNavigation);
-            }
-
-            // Scroll detection
-            const container = document.querySelector('.container-snap');
-            container.addEventListener('scroll', () => {
-                requestTick();
-            });
-
-            // Navigation dots with improved touch targets
-            navDots.forEach((dot, index) => {
-                dot.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    scrollToSection(index);
-                });
-                
-                // Add touch event for better mobile responsiveness
-                dot.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    scrollToSection(index);
-                });
-            });
-
-            // Improved touch events for mobile
-            if (isMobile) {
-                let touchArea = document.querySelector('.container-snap');
-                touchArea.addEventListener('touchstart', handleTouchStart, { passive: true });
-                touchArea.addEventListener('touchend', handleTouchEnd, { passive: true });
-            }
+            // Scroll progress
+            window.addEventListener('scroll', updateScrollProgress);
 
             // Project card hover effects (desktop only)
-            if (!isMobile) {
+            if (window.innerWidth > 768) {
                 const projectCards = document.querySelectorAll('.project-card');
                 projectCards.forEach(card => {
                     card.addEventListener('mouseenter', () => {
@@ -855,23 +616,10 @@
                     });
                 });
             }
-
-            // Handle orientation changes on mobile
-            window.addEventListener('orientationchange', () => {
-                setTimeout(() => {
-                    updateNavigation();
-                    updateScrollProgress();
-                }, 500);
-            });
         });
 
         // Handle resize events
-        window.addEventListener('resize', () => {
-            setTimeout(() => {
-                updateNavigation();
-                updateScrollProgress();
-            }, 100);
-        });
+        window.addEventListener('resize', updateScrollProgress);
     </script>
 </body>
 
