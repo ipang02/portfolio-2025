@@ -60,70 +60,6 @@
             transform: translateY(-4px);
         }
 
-        /* Selected project card styles */
-        .selected-project-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .selected-project-card:hover {
-            transform: translateY(-8px);
-        }
-
-        .selected-project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(200, 168, 130, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .selected-project-card:hover::before {
-            left: 100%;
-        }
-
-        .project-display {
-            height: 300px;
-            background: linear-gradient(135deg, #2d2a23 0%, #1a1814 100%);
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-display::after {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .selected-project-card:hover .project-display::after {
-            border-color: rgba(200, 168, 130, 0.6);
-        }
-
-        .project-preview {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
-            opacity: 0.6;
-            transition: all 0.3s ease;
-        }
-
-        .selected-project-card:hover .project-preview {
-            opacity: 0.8;
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
         /* Mobile-friendly navigation indicator */
         .nav-indicator {
             position: fixed;
@@ -293,11 +229,6 @@
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
-
-            /* Selected projects mobile adjustments */
-            .project-display {
-                height: 250px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -307,10 +238,6 @@
 
             .section {
                 padding: 0 0.75rem;
-            }
-
-            .project-display {
-                height: 200px;
             }
         }
 
@@ -363,8 +290,7 @@
                     </p>
                 </div>
                 <div class="hero-text">
-                    <div class="w-24 h-px mx-auto mt-8"
-                        style="background: linear-gradient(to right, transparent, #c8a882, transparent);">
+                    <div class="w-24 h-px mx-auto mt-8" style="background: linear-gradient(to right, transparent, #c8a882, transparent);">
                     </div>
                 </div>
             </div>
@@ -385,9 +311,9 @@
                 </h2>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="project-card p-6 rounded-lg border"
-                        style="background-color: #1a1814; border-color: #2d2a23;"
-                        onmouseover="this.style.borderColor='#c8a882'" onmouseout="this.style.borderColor='#2d2a23'">
+                    <div class="project-card p-6 rounded-lg border" style="background-color: #1a1814; border-color: #2d2a23;" 
+                         onmouseover="this.style.borderColor='#c8a882'" 
+                         onmouseout="this.style.borderColor='#2d2a23'">
                         <div class="h-2 w-16 mb-4 rounded" style="background-color: #c8a882;"></div>
                         <h3 class="text-xl font-medium mb-3">Digital Business Card</h3>
                         <p class="mb-4 text-sm leading-relaxed" style="color: #6b6356;">
@@ -395,22 +321,26 @@
                             with a simple tap.
                         </p>
                         <div class="flex space-x-4 text-sm">
-                            <a href="https://www.instagram.com/nextap.my?igsh=Znh6Z215dnpidnIw"
-                                class="transition-colors" style="color: #c8a882;"
-                                onmouseover="this.style.color='#b5a896'" onmouseout="this.style.color='#c8a882'">
+                            <a href="https://www.instagram.com/nextap.my?igsh=Znh6Z215dnpidnIw" 
+                               class="transition-colors" 
+                               style="color: #c8a882;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#c8a882'">
                                 Learn More →
                             </a>
-                            <a href="https://wa.me/601121448557?text=Hi%2C%20saya%20berminat%20untuk%20menempah%20Nextap%20Digital%20Business%20Card."
-                                class="transition-colors" style="color: #6b6356;"
-                                onmouseover="this.style.color='#b5a896'" onmouseout="this.style.color='#6b6356'">
+                            <a href="https://wa.me/601121448557?text=Hi%2C%20saya%20berminat%20untuk%20menempah%20Nextap%20Digital%20Business%20Card." 
+                               class="transition-colors" 
+                               style="color: #6b6356;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#6b6356'">
                                 Contact →
                             </a>
                         </div>
                     </div>
 
-                    <div class="project-card p-6 rounded-lg border"
-                        style="background-color: #1a1814; border-color: #2d2a23;"
-                        onmouseover="this.style.borderColor='#c8a882'" onmouseout="this.style.borderColor='#2d2a23'">
+                    <div class="project-card p-6 rounded-lg border" style="background-color: #1a1814; border-color: #2d2a23;" 
+                         onmouseover="this.style.borderColor='#c8a882'" 
+                         onmouseout="this.style.borderColor='#2d2a23'">
                         <div class="h-2 w-16 mb-4 rounded" style="background-color: #a67c52;"></div>
                         <h3 class="text-xl font-medium mb-3">Sublimation Jersey</h3>
                         <p class="mb-4 text-sm leading-relaxed" style="color: #6b6356;">
@@ -418,21 +348,26 @@
                             and personalized designs for teams, events, and individual customers.
                         </p>
                         <div class="flex space-x-4 text-sm">
-                            <a href="https://t.me/+ROxgxMVKX3ox4NSB" class="transition-colors" style="color: #c8a882;"
-                                onmouseover="this.style.color='#b5a896'" onmouseout="this.style.color='#c8a882'">
+                            <a href="https://t.me/+ROxgxMVKX3ox4NSB" 
+                               class="transition-colors" 
+                               style="color: #c8a882;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#c8a882'">
                                 Catalogue →
                             </a>
-                            <a href="https://wa.me/601121448557?text=Hi%20Clover%20Exclusive%2C%20I%20would%20like%20to%20order%20sublimation%20jersey.%20Please%20assist%20me."
-                                class="transition-colors" style="color: #6b6356;"
-                                onmouseover="this.style.color='#b5a896'" onmouseout="this.style.color='#6b6356'">
+                            <a href="https://wa.me/601121448557?text=Hi%20Clover%20Exclusive%2C%20I%20would%20like%20to%20order%20sublimation%20jersey.%20Please%20assist%20me." 
+                               class="transition-colors" 
+                               style="color: #6b6356;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#6b6356'">
                                 Order Now →
                             </a>
                         </div>
                     </div>
 
-                    <div class="project-card p-6 rounded-lg border"
-                        style="background-color: #1a1814; border-color: #2d2a23;"
-                        onmouseover="this.style.borderColor='#c8a882'" onmouseout="this.style.borderColor='#2d2a23'">
+                    <div class="project-card p-6 rounded-lg border" style="background-color: #1a1814; border-color: #2d2a23;" 
+                         onmouseover="this.style.borderColor='#c8a882'" 
+                         onmouseout="this.style.borderColor='#2d2a23'">
                         <div class="h-2 w-16 mb-4 rounded" style="background-color: #8b7355;"></div>
                         <h3 class="text-xl font-medium mb-3">Graphic Design</h3>
                         <p class="mb-4 text-sm leading-relaxed" style="color: #6b6356;">
@@ -441,151 +376,20 @@
                             messages across all platforms.
                         </p>
                         <div class="flex space-x-4 text-sm">
-                            <a href="#" class="transition-colors" style="color: #c8a882;"
-                                onmouseover="this.style.color='#b5a896'" onmouseout="this.style.color='#c8a882'">
+                            <a href="#" 
+                               class="transition-colors" 
+                               style="color: #c8a882;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#c8a882'">
                                 Portfolio →
                             </a>
-                            <a href="#" class="transition-colors" style="color: #6b6356;"
-                                onmouseover="this.style.color='#b5a896'" onmouseout="this.style.color='#6b6356'">
+                            <a href="#" 
+                               class="transition-colors" 
+                               style="color: #6b6356;" 
+                               onmouseover="this.style.color='#b5a896'" 
+                               onmouseout="this.style.color='#6b6356'">
                                 Contact →
                             </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Selected Projects Section -->
-        <section class="section flex items-center justify-center py-20" id="selected-projects">
-            <div class="container mx-auto px-4 max-w-6xl">
-                <h2 class="text-4xl md:text-5xl font-light mb-16 text-center">
-                    Selected <span style="color: #c8a882;">Projects</span>
-                </h2>
-
-                <div class="space-y-16">
-                    <!-- Project 1: Nextap Digital Business Card -->
-                    <div class="selected-project-card">
-                        <div class="grid md:grid-cols-2 gap-12 items-center">
-                            <div class="order-2 md:order-1">
-                                <div class="project-display">
-                                    <div class="project-preview">
-                                        📱COMING SOON
-                                    </div>
-                                    <div class="absolute bottom-4 left-4 right-4">
-                                        <div class="flex items-center justify-between"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="order-1 md:order-2">
-                                <div class="h-1 w-20 mb-6 rounded" style="background-color: #c8a882;"></div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-4">Nextap Digital Business Card</h3>
-                                <p class="text-lg mb-6 leading-relaxed" style="color: #d4c7b8;">
-                                    Revolutionary NFC-enabled business cards that transform networking. Simply tap to
-                                    instantly share your complete professional information, social media links, and
-                                    contact details. No apps required - works with any smartphone.
-                                </p>
-                                <div class="flex flex-col sm:flex-row gap-4">
-                                    <a href="https://www.instagram.com/nextap.my?igsh=Znh6Z215dnpidnIw" target="_blank"
-                                        class="inline-flex items-center px-6 py-3 rounded-lg transition-colors font-medium"
-                                        style="background-color: #c8a882; color: #12110c;"
-                                        onmouseover="this.style.backgroundColor='#b5a896'"
-                                        onmouseout="this.style.backgroundColor='#c8a882'">
-                                        View Project →
-                                    </a>
-                                    <a href="https://wa.me/601121448557?text=Hi%2C%20saya%20berminat%20untuk%20menempah%20Nextap%20Digital%20Business%20Card."
-                                        target="_blank"
-                                        class="inline-flex items-center px-6 py-3 rounded-lg border transition-colors"
-                                        style="border-color: #2d2a23;" onmouseover="this.style.borderColor='#c8a882'"
-                                        onmouseout="this.style.borderColor='#2d2a23'">
-                                        Get Yours
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 2 Riswa Apparel Sublimation -->
-                    <div class="selected-project-card">
-                        <div class="grid md:grid-cols-2 gap-12 items-center">
-                            <div>
-                                <div class="h-1 w-20 mb-6 rounded" style="background-color: #a67c52;"></div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-4">Riswa Apparel Website</h3>
-                                <p class="text-lg mb-6 leading-relaxed" style="color: #d4c7b8;">
-                                    Premium sublimation printing service specializing in custom sports jerseys and
-                                    apparel. From team uniforms to personalized designs, we deliver high-quality prints
-                                    that last. Perfect for sports teams, events, and corporate branding.
-                                </p>
-                                <div class="flex flex-col sm:flex-row gap-4">
-                                    <a href="https://www.riswaapparel.com/" target="_blank"
-                                        class="inline-flex items-center px-6 py-3 rounded-lg transition-colors font-medium"
-                                        style="background-color: #a67c52; color: #12110c;"
-                                        onmouseover="this.style.backgroundColor='#8b7355'"
-                                        onmouseout="this.style.backgroundColor='#a67c52'">
-                                        View Website →
-                                    </a>
-                                    <a href="https://wa.me/601121448557?text=Hi%20Nik%20Irfan%2C%20I%20am%20interested%20in%20creating%20a%20website.%20Please%20assist%20me."
-                                        target="_blank"
-                                        class="inline-flex items-center px-6 py-3 rounded-lg border transition-colors"
-                                        style="border-color: #2d2a23;" onmouseover="this.style.borderColor='#a67c52'"
-                                        onmouseout="this.style.borderColor='#2d2a23'">
-                                        Get Yours
-                                    </a>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="project-display relative">
-                                    <div class="project-preview relative">
-                                        <img src="projects/riswa-mockup.png" alt="Project Preview"
-                                            class="w-full h-auto object-cover rounded-md">
-                                    </div>
-                                    <div class="absolute bottom-4 left-4 right-4">
-                                        <div class="flex items-center justify-between">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 3: Design Portfolio -->
-                    <div class="selected-project-card">
-                        <div class="grid md:grid-cols-2 gap-12 items-center">
-                            <div class="order-2 md:order-1">
-                                <div class="project-display relative">
-                                    <div class="project-preview relative">
-                                        <img src="projects/balai-buchu.png" alt="Project Preview"
-                                            class="w-full h-auto object-cover rounded-md">
-                                    </div>
-                                    <div class="absolute bottom-4 left-4 right-4">
-                                        <div class="flex items-center justify-between">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="order-1 md:order-2">
-                                <div class="h-1 w-20 mb-6 rounded" style="background-color: #8b7355;"></div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-4">Balai Buchu Logo Design</h3>
-                                <p class="text-lg mb-6 leading-relaxed" style="color: #d4c7b8;">
-                                    Developed a clean, memorable logo for Balai Buchu, a restaurant specializing in lamb dishes.
-                                    The design reflects the brand’s focus on quality, flavor, and simplicity, creating a strong
-                                    visual identity for use across digital and print platforms.
-                                </p>
-                                <div class="flex flex-col sm:flex-row gap-4">
-                                    <a href="#contact"
-                                        class="inline-flex items-center px-6 py-3 rounded-lg transition-colors font-medium"
-                                        style="background-color: #8b7355; color: #12110c;"
-                                        onmouseover="this.style.backgroundColor='#6b6356'"
-                                        onmouseout="this.style.backgroundColor='#8b7355'">
-                                        View Portfolio →
-                                    </a>
-                                    <a href="https://wa.me/601121448557?text=Hi%20Nik%20Irfan%2C%20I%20am%20interested%20in%20creating%20a%20logo.%20Please%20assist%20me."
-                                        class="inline-flex items-center px-6 py-3 rounded-lg border transition-colors"
-                                        style="border-color: #2d2a23;" onmouseover="this.style.borderColor='#8b7355'"
-                                        onmouseout="this.style.borderColor='#2d2a23'">
-                                        Hire Me
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -619,21 +423,15 @@
                         <div>
                             <h3 class="text-lg font-medium mb-3" style="color: #c8a882;">Technologies</h3>
                             <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 text-sm rounded border"
-                                    style="background-color: #1a1814; border-color: #2d2a23;">Adobe
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Adobe
                                     Illustrator</span>
-                                <span class="px-3 py-1 text-sm rounded border"
-                                    style="background-color: #1a1814; border-color: #2d2a23;">Adobe
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Adobe
                                     Photoshop</span>
-                                <span class="px-3 py-1 text-sm rounded border"
-                                    style="background-color: #1a1814; border-color: #2d2a23;">Adobe After
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Adobe After
                                     Effects</span>
-                                <span class="px-3 py-1 text-sm rounded border"
-                                    style="background-color: #1a1814; border-color: #2d2a23;">HTML/CSS</span>
-                                <span class="px-3 py-1 text-sm rounded border"
-                                    style="background-color: #1a1814; border-color: #2d2a23;">Laravel</span>
-                                <span class="px-3 py-1 text-sm rounded border"
-                                    style="background-color: #1a1814; border-color: #2d2a23;">Sublimation
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">HTML/CSS</span>
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Laravel</span>
+                                <span class="px-3 py-1 text-sm rounded border" style="background-color: #1a1814; border-color: #2d2a23;">Sublimation
                                     Printing</span>
                             </div>
                         </div>
@@ -662,37 +460,49 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-                    <a href="mailto:nmirfan02@gmail.com" class="px-8 py-3 rounded-lg transition-colors font-medium"
-                        style="background-color: #c8a882; color: #12110c;"
-                        onmouseover="this.style.backgroundColor='#b5a896'"
+                    <a href="mailto:nmirfan02@gmail.com"
+                        class="px-8 py-3 rounded-lg transition-colors font-medium"
+                        style="background-color: #c8a882; color: #12110c;" 
+                        onmouseover="this.style.backgroundColor='#b5a896'" 
                         onmouseout="this.style.backgroundColor='#c8a882'">
                         Send Message
                     </a>
                     <a href="https://wa.me/601121448557?text=Hi!%20I%20just%20visited%20your%20portfolio%20website%20and%20would%20love%20to%20know%20more%20about%20your%20work."
-                        class="border px-8 py-3 rounded-lg transition-colors" style="border-color: #2d2a23;"
-                        onmouseover="this.style.borderColor='#6b6356'" onmouseout="this.style.borderColor='#2d2a23'">
+                        class="border px-8 py-3 rounded-lg transition-colors" 
+                        style="border-color: #2d2a23;" 
+                        onmouseover="this.style.borderColor='#6b6356'" 
+                        onmouseout="this.style.borderColor='#2d2a23'">
                         Whatsapp
                     </a>
                 </div>
 
                 <div class="flex justify-center space-x-8">
-                    <a href="https://github.com/ipang02" class="transition-colors" style="color: #6b6356;"
-                        onmouseover="this.style.color='#c8a882'" onmouseout="this.style.color='#6b6356'">
+                    <a href="https://github.com/ipang02" 
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         GitHub
                     </a>
                     <a href="https://www.linkedin.com/in/nik-muhammad-irfan-bin-shamsul-zuhairi-501a11246/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
-                        class="transition-colors" style="color: #6b6356;" onmouseover="this.style.color='#c8a882'"
-                        onmouseout="this.style.color='#6b6356'">
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         LinkedIn
                     </a>
                     <a href="https://www.instagram.com/ipang.sz?igsh=NGd6NHQ3cWtndW9i&utm_source=qr"
-                        class="transition-colors" style="color: #6b6356;" onmouseover="this.style.color='#c8a882'"
-                        onmouseout="this.style.color='#6b6356'">
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         Instagram
                     </a>
-                    <a href="https://www.tiktok.com/@ipang.kb?_t=ZS-8wXZ1XXlSgq&_r=1" class="transition-colors"
-                        style="color: #6b6356;" onmouseover="this.style.color='#c8a882'"
-                        onmouseout="this.style.color='#6b6356'">
+                    <a href="https://www.tiktok.com/@ipang.kb?_t=ZS-8wXZ1XXlSgq&_r=1"
+                       class="transition-colors" 
+                       style="color: #6b6356;" 
+                       onmouseover="this.style.color='#c8a882'" 
+                       onmouseout="this.style.color='#6b6356'">
                         Tiktok
                     </a>
                 </div>
@@ -742,7 +552,6 @@
         // Animate section content
         function animateSection(section) {
             const projectCards = section.querySelectorAll('.project-card');
-            const selectedProjectCards = section.querySelectorAll('.selected-project-card');
             const aboutContent = section.querySelectorAll('.space-y-6 > *');
 
             if (projectCards.length > 0) {
@@ -753,18 +562,6 @@
                     delay: anime.stagger(150),
                     duration: 600,
                     easing: 'easeOutQuart'
-                });
-            }
-
-            if (selectedProjectCards.length > 0) {
-                anime({
-                    targets: selectedProjectCards,
-                    opacity: [0, 1],
-                    translateY: [80, 0],
-                    scale: [0.95, 1],
-                    delay: anime.stagger(200),
-                    duration: 800,
-                    easing: 'easeOutCubic'
                 });
             }
 
@@ -814,30 +611,6 @@
                             targets: card,
                             scale: 1,
                             duration: 300,
-                            easing: 'easeOutQuart'
-                        });
-                    });
-                });
-
-                // Selected project card hover effects
-                const selectedProjectCards = document.querySelectorAll('.selected-project-card');
-                selectedProjectCards.forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        anime({
-                            targets: card.querySelector('.project-display'),
-                            scale: 1.02,
-                            rotateY: [0, 2],
-                            duration: 400,
-                            easing: 'easeOutQuart'
-                        });
-                    });
-
-                    card.addEventListener('mouseleave', () => {
-                        anime({
-                            targets: card.querySelector('.project-display'),
-                            scale: 1,
-                            rotateY: [2, 0],
-                            duration: 400,
                             easing: 'easeOutQuart'
                         });
                     });
