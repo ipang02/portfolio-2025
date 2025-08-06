@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <title>Design Gallery - Nik Irfan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        'dark-brown': '#12110c',
+                        'warm-brown': '#1a1814',
+                        'medium-brown': '#2d2a23',
+                        'warm-beige': '#b5a896',
+                        'light-beige': '#d4c7b8',
+                        'accent-gold': '#c8a882',
+                        'soft-cream': '#f5f1eb'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Category Section */
+        .category-section {
+            margin-bottom: 6rem;
+        }
+
+        /* Slider Container */
+        .slider-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .slider-wrapper {
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        /* Image Slide */
+        .image-slide {
+            min-width: 300px;
+            width: 300px;
+            height: 400px;
+            margin-right: 2rem;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .image-slide:hover {
+            transform: translateY(-8px);
+        }
+
+        .image-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-slide:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Placeholder for missing images */
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d2a23 0%, #1a1814 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #6b6356;
+        }
+
+        /* Overlay */
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .image-slide:hover .image-overlay {
+            transform: translateY(0);
+        }
+
+        .overlay-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #c8a882;
+        }
+
+        .overlay-description {
+            font-size: 0.9rem;
+            color: #d4c7b8;
+            line-height: 1.4;
+        }
+
+        /* Navigation */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(200, 168, 130, 0.9);
+            color: #12110c;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .slider-nav:hover {
+            background: #c8a882;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-nav.prev {
+            left: -25px;
+        }
+
+        .slider-nav.next {
+            right: -25px;
+        }
+
+        .slider-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(1);
+        }
+
+        /* Category Title */
+        .category-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #d4c7b8;
+        }
+
+        .category-title span {
+            color: #c8a882;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(26, 24, 20, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid #2d2a23;
+            border-radius: 25px;
+            color: #b5a896;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(200, 168, 130, 0.1);
+            border-color: #c8a882;
+            color: #c8a882;
+            transform: translateX(-4px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .image-slide {
+                min-width: 250px;
+                width: 250px;
+                height: 320px;
+                margin-right: 1rem;
+            }
+
+            .category-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .category-section {
+                margin-bottom: 4rem;
+            }
+
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .slider-nav.prev {
+                left: -20px;
+            }
+
+            .slider-nav.next {
+                right: -20px;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+
+            .image-overlay {
+                padding: 1.5rem 1rem 1rem;
+            }
+
+            .overlay-title {
+                font-size: 1rem;
+            }
+
+            .overlay-description {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .image-slide {
+                min-width: 220px;
+                width: 220px;
+                height: 280px;
+            }
+
+            .category-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 0px;
+                background: transparent;
+            }
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1814;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2d2a23;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b5a896;
+        }
+
+        /* Touch scrolling for mobile */
+        .slider-wrapper {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 768px) {
+            .slider-wrapper {
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            .slider-track {
+                transition: none;
+            }
+
+            .slider-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-mono" style="background-color: #12110c; color: #b5a896;">
+    <!-- Back Button -->
+    <a href="index.html" class="back-btn">
+        ← Back to Portfolio
+    </a>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-16">
+        <!-- Header -->
+        <section class="text-center mb-16 px-4">
+            <h1 class="text-5xl md:text-6xl font-light mb-6 tracking-tight">
+                Design <span style="color: #c8a882;">Gallery</span>
+            </h1>
+            <p class="text-lg max-w-2xl mx-auto leading-relaxed" style="color: #d4c7b8;">
+                A showcase of my creative work across different design disciplines
+            </p>
+        </section>
+
+        <!-- Logo Design Category -->
+        <div class="category-section px-4">
+            <h2 class="category-title">
+                <span>Logo</span> Design
+            </h2>
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <div class="slider-track" id="logoSlider">
+                        <!-- Logo Design 1 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="projects/balai-buchu.png"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Balai Buchu Restaurant</div>
+                                <div class="overlay-description">Modern logo design for a lamb specialty restaurant, emphasizing quality and tradition.</div>
+                            </div>
+                        </div>
+                        <!-- Logo Design 2 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="logo/bekkimobile.png"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Bekki Mobile</div>
+                                <div class="overlay-description">Logo design for a mobile repair specialist offering fast and reliable smartphone solutions.</div>
+                            </div>
+                        </div>
+                        <!-- Logo Design 3 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="logo/RR WHITE.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Repeat Recipe</div>
+                                <div class="overlay-description">Branding for a cozy café focused on comfort food, warm vibes, and memorable taste.</div>
+                            </div>
+                        </div>
+                        <!-- Logo Design 4 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="logo/ahbafarm.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">AHBA Farm</div>
+                                <div class="overlay-description">Logo for a local farm committed to fresh produce and sustainable agriculture.</div>
+                            </div>
+                        </div>
+                        <!-- Logo Design 5 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="logo/desanur.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Desa Nur Enterprise</div>
+                                <div class="overlay-description">Construction company branding reflecting strength, structure, and reliability.</div>
+                            </div>
+                        </div>
+                        <!-- Logo Design 6 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="logo/wsh.png"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">WSH Maju Resources</div>
+                                <div class="overlay-description">Visual identity for a property contractor specializing in residential and commercial development.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-nav prev" onclick="moveSlider('logoSlider', -1)">‹</button>
+                <button class="slider-nav next" onclick="moveSlider('logoSlider', 1)">›</button>
+            </div>
+        </div>
+
+        <!-- Poster Design Category -->
+        <div class="category-section px-4">
+            <h2 class="category-title">
+                <span>Poster</span> Design
+            </h2>
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <div class="slider-track" id="posterSlider">
+                        <!-- Poster Design 1 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="poster/poster 1.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Balai Buchu Poster</div>
+                                <div class="overlay-description">Vibrant and modern poster design for a 12.12 promotion event.</div>
+                            </div>
+                        </div>
+                        <!-- Poster Design 2 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="poster/poster 2.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Food Promotion</div>
+                                <div class="overlay-description">Cinematic poster design for F&B.</div>
+                            </div>
+                        </div>
+                        <!-- Poster Design 3 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="poster/lgs.png"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Golf Tour Services</div>
+                                <div class="overlay-description">Dynamic poster design for Liberty Golf Services</div>
+                            </div>
+                        </div>
+                        <!-- Poster Design 4 -->
+                        <!-- <div class="image-slide">
+                            <div class="image-placeholder">🎨</div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Art Exhibition</div>
+                                <div class="overlay-description">Elegant poster design for contemporary art gallery exhibition.</div>
+                            </div>
+                        </div> -->
+                        <!-- Poster Design 5 -->
+                        <!-- <div class="image-slide">
+                            <div class="image-placeholder">🍕</div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Restaurant Promotion</div>
+                                <div class="overlay-description">Appetizing poster design for restaurant menu promotion and special offers.</div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <button class="slider-nav prev" onclick="moveSlider('posterSlider', -1)">‹</button>
+                <button class="slider-nav next" onclick="moveSlider('posterSlider', 1)">›</button>
+            </div>
+        </div>
+
+        <!-- Jersey Design Category -->
+        <div class="category-section px-4">
+            <h2 class="category-title">
+                <span>Jersey</span> Design
+            </h2>
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <div class="slider-track" id="jerseySlider">
+                        <!-- Jersey Design 1 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="jersey/jersey-1.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Company Jersey</div>
+                                <div class="overlay-description">Professional team jersey design with custom branding and colors.</div>
+                            </div>
+                        </div>
+                        <!-- Jersey Design 2 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="jersey/jersey-2.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">School Jersey</div>
+                                <div class="overlay-description">Modern jersey design for BADAR SMKA Tok Bachok.</div>
+                            </div>
+                        </div>
+                        <!-- Jersey Design 3 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="jersey/jersey-3.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">Running Event Jersey</div>
+                                <div class="overlay-description">Clean and modern jersey design for Calories Run in UiTM Shah Alam.</div>
+                            </div>
+                        </div>
+                        <!-- Jersey Design 4 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="jersey/jersey-4.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">School Jersey</div>
+                                <div class="overlay-description">Jersey for Blue Color House of SMKA Tok Bachok.</div>
+                            </div>
+                        </div>
+                        <!-- Jersey Design 5 -->
+                        <div class="image-slide">
+                            <div class="image-placeholder"><img src="jersey/jersey-5.jpg"></div>
+                            <div class="image-overlay">
+                                <div class="overlay-title">School Club Jersey</div>
+                                <div class="overlay-description">Corporate style jersey design for KGKT Club.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-nav prev" onclick="moveSlider('jerseySlider', -1)">‹</button>
+                <button class="slider-nav next" onclick="moveSlider('jerseySlider', 1)">›</button>
+            </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <section class="text-center mt-20 px-4">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-2xl md:text-3xl font-light mb-6">
+                    Like what you see?
+                </h2>
+                <p class="text-lg mb-8" style="color: #d4c7b8;">
+                    Let's work together to create something amazing for your brand.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://wa.me/601121448557?text=Hi%20Nik%20Irfan%2C%20I%20just%20viewed%20your%20design%20gallery%20and%20would%20like%20to%20discuss%20a%20project."
+                        class="inline-flex items-center justify-center px-8 py-3 rounded-lg transition-colors font-medium"
+                        style="background-color: #c8a882; color: #12110c;"
+                        onmouseover="this.style.backgroundColor='#b5a896'"
+                        onmouseout="this.style.backgroundColor='#c8a882'">
+                        Start a Project →
+                    </a>
+                    <a href="mailto:nmirfan02@gmail.com"
+                        class="inline-flex items-center justify-center px-8 py-3 rounded-lg border transition-colors"
+                        style="border-color: #2d2a23;" onmouseover="this.style.borderColor='#c8a882'"
+                        onmouseout="this.style.borderColor='#2d2a23'">
+                        Get in Touch
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Simple slider functionality
+        const sliders = {
+            logoSlider: { currentIndex: 0 },
+            posterSlider: { currentIndex: 0 },
+            jerseySlider: { currentIndex: 0 }
+        };
+
+        function moveSlider(sliderId, direction) {
+            const slider = document.getElementById(sliderId);
+            const slides = slider.querySelectorAll('.image-slide');
+            const slideWidth = 300 + 32; // slide width + margin
+            const maxIndex = slides.length - Math.floor(slider.parentElement.offsetWidth / slideWidth);
+            
+            sliders[sliderId].currentIndex += direction;
+            
+            // Constrain to bounds
+            if (sliders[sliderId].currentIndex < 0) {
+                sliders[sliderId].currentIndex = 0;
+            }
+            if (sliders[sliderId].currentIndex > maxIndex) {
+                sliders[sliderId].currentIndex = maxIndex;
+            }
+            
+            // Apply transform
+            const translateX = -sliders[sliderId].currentIndex * slideWidth;
+            slider.style.transform = `translateX(${translateX}px)`;
+            
+            // Update navigation buttons
+            updateNavButtons(sliderId, maxIndex);
+        }
+
+        function updateNavButtons(sliderId, maxIndex) {
+            const container = document.getElementById(sliderId).closest('.slider-container');
+            const prevBtn = container.querySelector('.prev');
+            const nextBtn = container.querySelector('.next');
+            
+            prevBtn.disabled = sliders[sliderId].currentIndex === 0;
+            nextBtn.disabled = sliders[sliderId].currentIndex >= maxIndex;
+        }
+
+        // Initialize sliders
+        function initSliders() {
+            Object.keys(sliders).forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const slideWidth = 300 + 32;
+                const maxIndex = slider.querySelectorAll('.image-slide').length - Math.floor(slider.parentElement.offsetWidth / slideWidth);
+                updateNavButtons(sliderId, maxIndex);
+            });
+        }
+
+        // Handle window resize
+        function handleResize() {
+            Object.keys(sliders).forEach(sliderId => {
+                sliders[sliderId].currentIndex = 0;
+                const slider = document.getElementById(sliderId);
+                slider.style.transform = 'translateX(0px)';
+            });
+            initSliders();
+        }
+
+        // Touch/swipe support for mobile
+        function addTouchSupport() {
+            Object.keys(sliders).forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                let startX = 0;
+                let endX = 0;
+
+                slider.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+
+                slider.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    const threshold = 50;
+                    const diff = startX - endX;
+
+                    if (Math.abs(diff) > threshold) {
+                        if (diff > 0) {
+                            moveSlider(sliderId, 1);
+                        } else {
+                            moveSlider(sliderId, -1);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initSliders();
+            addTouchSupport();
+            
+            window.addEventListener('resize', handleResize);
+        });
+    </script>
+</body>
+
+</html>
